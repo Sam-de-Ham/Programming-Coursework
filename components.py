@@ -88,16 +88,3 @@ def place_random_single_ship(board, boat_name, boat_size):
                 return place_random_single_ship(board, boat_name, boat_size)
         for i in range(boat_size):
             board[row + i][col] = boat_name
-
-
-
-
-def print_2d_array(arr_2d):
-    # Find the maximum width for each column
-    col_widths = [max(len(str(row[i])) for row in arr_2d) for i in range(len(arr_2d[0]))]
-
-    # Print the 2D array with aligned columns
-    for row in arr_2d:
-        print(" ".join(str(row[i]).ljust(col_widths[i]) for i in range(len(row))))
-
-# print_2d_array(place_battleships(initialize_board(), create_battleships(), "random"))

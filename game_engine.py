@@ -12,7 +12,7 @@ def attack(coordinates, board, battleships):
 def get_input(prompt):
     while True:
         value = input(prompt)
-        if value.isnumeric() and int(value) >= 0:
+        if value.isnumeric() and int(value) >= 0 and int(value) < 10:
             return int(value)
 
 def cli_coordinates_input():
