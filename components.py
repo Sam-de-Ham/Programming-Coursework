@@ -1,4 +1,5 @@
 import random
+import json
 
 def initialize_board(size = 10):
     if size < 1:
@@ -22,10 +23,43 @@ def place_battleships(board, ships, algorithm = "simple"):
 
     if algorithm == "random":
         for boat_name, boat_size in ships.items():
-            place_single_ship(board, boat_name, boat_size)
+            place_random_single_ship(board, boat_name, boat_size)
         return board
+    
+    if algorithm == "custom": 
+        with open('placement.json', 'r') as file:
+            placements = json.load(file)  
+    
+        for boat_name, boat_size in ships.items():
+            place_custom_single_ship(board, boat_name, boat_size, placements[boat_name])
+        return board
+    
 
-def place_single_ship(board, boat_name, boat_size):
+def place_custom_single_ship(board, boat_name, boat_size, placement):
+    if placement is None:
+        raise ValueError("Invalid placement")
+    
+    placement[0] = int(placement[0])
+    placement[1] = int(placement[1])
+    
+    if placement[2] == "h":
+        for i in range(boat_size):
+            if board[placement[1]][placement[0] + i] is not None:
+                raise ValueError("Invalid placement")
+        
+        for i in range(boat_size):
+            board[placement[1]][placement[0] + i] = boat_name
+
+    if placement[2] == "v":
+        for i in range(boat_size):
+            if board[placement[1] + i][placement[0]] is not None:
+                raise ValueError("Invalid placement")
+        
+        for i in range(boat_size):
+            board[placement[1] + i][placement[0]] = boat_name
+
+
+def place_random_single_ship(board, boat_name, boat_size):
     direction = random.choice(['horizontal', 'vertical'])
     if direction == "horizontal":
         board_size = len(board)
@@ -37,11 +71,11 @@ def place_single_ship(board, boat_name, boat_size):
 
         for i in range(boat_size):
             if board[row][col + i] is not None:
-                return place_single_ship(board, boat_name, boat_size)
+                return place_random_single_ship(board, boat_name, boat_size)
         for i in range(boat_size):
             board[row][col + i] = boat_name
     
-    if direction == "vertical":
+    elif direction == "vertical":
         board_size = len(board)
         available_rows = board_size - boat_size + 1
         available_cols = board_size
@@ -51,13 +85,9 @@ def place_single_ship(board, boat_name, boat_size):
 
         for i in range(boat_size):
             if board[row + i][col] is not None:
-                return place_single_ship(board, boat_name, boat_size)
+                return place_random_single_ship(board, boat_name, boat_size)
         for i in range(boat_size):
             board[row + i][col] = boat_name
-
-
-
-
 
 
 
@@ -70,4 +100,4 @@ def print_2d_array(arr_2d):
     for row in arr_2d:
         print(" ".join(str(row[i]).ljust(col_widths[i]) for i in range(len(row))))
 
-print_2d_array(place_battleships(initialize_board(), create_battleships(), "random"))
+# print_2d_array(place_battleships(initialize_board(), create_battleships(), "random"))
