@@ -1,4 +1,8 @@
+import random
+
 def initialize_board(size = 10):
+    if size < 1:
+        raise ValueError("Size must be a positive integer")
     board = [[None for _ in range(size)] for _ in range(size)]
     return board
 
@@ -10,7 +14,60 @@ def create_battleships(filename = "battleships.txt"):
     return ships
 
 def place_battleships(board, ships, algorithm = "simple"):
-    for i, (key, value) in enumerate(ships.items()):
-        for j in range(value):
-            board[i][j] = key
-    return board
+    if algorithm == "simple":
+        for i, (key, value) in enumerate(ships.items()):
+            for j in range(value):
+                board[i][j] = key
+        return board
+
+    if algorithm == "random":
+        for boat_name, boat_size in ships.items():
+            place_single_ship(board, boat_name, boat_size)
+        return board
+
+def place_single_ship(board, boat_name, boat_size):
+    direction = random.choice(['horizontal', 'vertical'])
+    if direction == "horizontal":
+        board_size = len(board)
+        available_rows = board_size
+        available_cols = board_size - boat_size + 1
+    
+        row = random.randint(0, available_rows - 1)
+        col = random.randint(0, available_cols - 1)
+
+        for i in range(boat_size):
+            if board[row][col + i] is not None:
+                return place_single_ship(board, boat_name, boat_size)
+        for i in range(boat_size):
+            board[row][col + i] = boat_name
+    
+    if direction == "vertical":
+        board_size = len(board)
+        available_rows = board_size - boat_size + 1
+        available_cols = board_size
+
+        row = random.randint(0, available_rows - 1)
+        col = random.randint(0, available_cols - 1)
+
+        for i in range(boat_size):
+            if board[row + i][col] is not None:
+                return place_single_ship(board, boat_name, boat_size)
+        for i in range(boat_size):
+            board[row + i][col] = boat_name
+
+
+
+
+
+
+
+
+def print_2d_array(arr_2d):
+    # Find the maximum width for each column
+    col_widths = [max(len(str(row[i])) for row in arr_2d) for i in range(len(arr_2d[0]))]
+
+    # Print the 2D array with aligned columns
+    for row in arr_2d:
+        print(" ".join(str(row[i]).ljust(col_widths[i]) for i in range(len(row))))
+
+print_2d_array(place_battleships(initialize_board(), create_battleships(), "random"))

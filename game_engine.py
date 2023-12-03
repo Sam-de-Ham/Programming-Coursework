@@ -9,12 +9,18 @@ def attack(coordinates, board, battleships):
         board[y][x] = None
         return True
     
+def get_input(prompt):
+    while True:
+        value = input(prompt)
+        if value.isnumeric() and int(value) >= 0:
+            return int(value)
+
 def cli_coordinates_input():
-    x = int(input("x: "))
-    y = int(input("y: "))
+    x = get_input("Enter x coordinate: ")
+    y = get_input("Enter y coordinate: ")
     return x, y
 
-def simple_game_loop():
+def simple_game_loop(size):
     print("Welcome to the game Battleships!")
 
     board = initialize_board()
@@ -25,10 +31,8 @@ def simple_game_loop():
         coords = cli_coordinates_input()
         outcome = attack(coords, board, ships)
         print("Hit" if outcome else "Miss")
-        for row in board:
-            print(row)
-
     print("Game over")
+
 
 if __name__ == "__main__":
     simple_game_loop()
