@@ -29,7 +29,7 @@ def placement_interface():
             ai_board = initialise_board(size = 10)
 
             player_board = place_battleships(player_board, ships, "custom")
-            ai_board = place_battleships(ai_board, ships, "simple")
+            ai_board = place_battleships(ai_board, ships, "random")
             board_initialized = True
         
         return jsonify({'message': 'Received'}), 200
@@ -58,17 +58,20 @@ def process_attack():
 
         outcome = attack((x, y), ai_board, ships)
 
-    if check_empty(ai_board):
-        print("Game Over, player won")
-        return jsonify({'hit': True, 'Player_Turn': (x, y), 'finished': 'Game Over Player wins'})
+        if check_empty(ai_board):
+            print("Game Over, player won")
+            return jsonify({'hit': True, 'Player_Turn': (x, y), 'finished': 'Game Over Player wins'})
 
-    ai_coordinates = generate_attack()
-    
-    if check_empty(player_board):
-        print("Game Over, AI won")
-        return jsonify({'hit': True, 'AI_Turn': ai_coordinates, 'finished': 'Game Over AI wins'})
-    
-    return jsonify({'hit': outcome, 'AI_Turn': ai_coordinates})
+
+
+        ai_coordinates = generate_attack()
+        attack(ai_coordinates, player_board, ships)
+        
+        if check_empty(player_board):
+            print("Game Over, AI won")
+            return jsonify({'hit': True, 'AI_Turn': ai_coordinates, 'finished': 'Game Over AI wins'})
+        
+        return jsonify({'hit': outcome, 'AI_Turn': ai_coordinates})
 
 if __name__ == '__main__':
     app.run(debug=True)
