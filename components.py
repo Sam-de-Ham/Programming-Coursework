@@ -1,7 +1,7 @@
 import random
 import json
 
-def initialize_board(size = 10):
+def initialise_board(size = 10):
     if size < 1:
         raise ValueError("Size must be a positive integer")
     board = [[None for _ in range(size)] for _ in range(size)]

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, redirect
-from components import initialize_board, create_battleships, place_battleships
+from components import initialise_board, create_battleships, place_battleships
 from game_engine import attack
 from mp_game_engine import generate_attack
 import json
@@ -25,11 +25,11 @@ def placement_interface():
 
 
         if not board_initialized:
-            player_board = initialize_board(size = 10)
-            ai_board = initialize_board(size = 10)
+            player_board = initialise_board(size = 10)
+            ai_board = initialise_board(size = 10)
 
             player_board = place_battleships(player_board, ships, "custom")
-            ai_board = place_battleships(ai_board, ships, "random")
+            ai_board = place_battleships(ai_board, ships, "simple")
             board_initialized = True
         
         return jsonify({'message': 'Received'}), 200
@@ -57,7 +57,19 @@ def process_attack():
         y = int(request.args.get('y'))
 
         outcome = attack((x, y), ai_board, ships)
-        return jsonify({'hit': outcome, 'AI_Turn': generate_attack()})
+
+    for row in ai_board:
+        if all(value == None for value in row):
+            return jsonify({'hit': True, 'Player_Turn': (x, y), 'finished': 'Game Over Player wins'})
+
+    ai_coordinates = generate_attack()
+    
+    for row in player_board:
+        if all(value == None for value in row):
+            print("Game Over")
+            return jsonify({'hit': True, 'AI_Turn': ai_coordinates, 'finished': 'Game Over AI wins'})
+    
+    return jsonify({'hit': outcome, 'AI_Turn': ai_coordinates})
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -12,8 +12,8 @@ def generate_attack():
 def ai_opponent_game_loop():
     print("Welcome to the game Battleships!\n")
 
-    players["Player"] = (place_battleships(initialize_board(), create_battleships(), "custom"), create_battleships())
-    players["AI"] = (place_battleships(initialize_board(), create_battleships(), "random"), create_battleships())
+    players["Player"] = (place_battleships(initialise_board(), create_battleships(), "custom"), create_battleships())
+    players["AI"] = (place_battleships(initialise_board(), create_battleships(), "random"), create_battleships())
 
     while game__not_over():
         coords = cli_coordinates_input()

@@ -25,7 +25,7 @@ def placement_interface():
             json.dump(data, json_file)
 
         if not board_initialised:
-            player_board = initialize_board(size = 10)
+            player_board = initialise_board(size = 10)
             player_board = place_battleships(player_board, ships, "custom")
             board_initialised = True
 

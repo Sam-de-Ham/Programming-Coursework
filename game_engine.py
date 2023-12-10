@@ -23,7 +23,7 @@ def cli_coordinates_input():
 def simple_game_loop(size):
     print("Welcome to the game Battleships!")
 
-    board = initialize_board()
+    board = initialise_board()
     ships = create_battleships()
     place_battleships(board, ships)
 
