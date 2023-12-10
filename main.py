@@ -10,7 +10,7 @@ board_initialized = False
 
 @app.route('/placement', methods=['GET', 'POST'])
 def placement_interface():
-    global player_board, ships, board_initialized
+    global player_board, ai_board, ships, board_initialized
 
     if request.method == 'GET':
         ships = create_battleships()
@@ -26,7 +26,10 @@ def placement_interface():
 
         if not board_initialized:
             player_board = initialize_board(size = 10)
+            ai_board = initialize_board(size = 10)
+
             player_board = place_battleships(player_board, ships, "custom")
+            ai_board = place_battleships(ai_board, ships, "random")
             board_initialized = True
         
         return jsonify({'message': 'Received'}), 200
@@ -47,13 +50,13 @@ def root():
 
 @app.route('/attack', methods=['GET'])
 def process_attack():
-    global player_board
+    global player_board, ai_board
 
     if request.method == 'GET':
         x = int(request.args.get('x'))
         y = int(request.args.get('y'))
 
-        outcome = attack((x, y), player_board, ships)
+        outcome = attack((x, y), ai_board, ships)
         return jsonify({'hit': outcome, 'AI_Turn': generate_attack()})
 
 if __name__ == '__main__':
