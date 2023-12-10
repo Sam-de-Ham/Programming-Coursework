@@ -88,3 +88,10 @@ def place_random_single_ship(board, boat_name, boat_size):
                 return place_random_single_ship(board, boat_name, boat_size)
         for i in range(boat_size):
             board[row + i][col] = boat_name
+
+def check_empty(board):
+    for row in board:
+        for cell in row:
+            if cell is not None:
+                return False
+    return True
