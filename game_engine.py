@@ -25,7 +25,7 @@ def simple_game_loop(size):
 
     board = initialize_board()
     ships = create_battleships()
-    board = place_battleships(board, ships)
+    place_battleships(board, ships)
 
     while not all(value == 0 for value in ships.values()):
         coords = cli_coordinates_input()
@@ -35,4 +35,4 @@ def simple_game_loop(size):
 
 
 if __name__ == "__main__":
-    simple_game_loop()
+    simple_game_loop(10)
