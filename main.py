@@ -7,6 +7,8 @@ import json
 app = Flask(__name__)
 
 board_initialized = False
+# hit_player = [[None for _ in range(10)] for _ in range(10)]
+# hit_ai = [[None for _ in range(10)] for _ in range(10)]
 
 @app.route('/placement', methods=['GET', 'POST'])
 def placement_interface():
@@ -14,7 +16,6 @@ def placement_interface():
 
     if request.method == 'GET':
         ships = create_battleships()
-        board_size = 10
         return render_template('placement.html', ships=ships, board_size=10)
 
     elif request.method == 'POST':
@@ -22,7 +23,6 @@ def placement_interface():
 
         with open("placement.json", 'w') as json_file:
             json.dump(data, json_file)
-
 
         if not board_initialized:
             player_board = initialise_board(size = 10)
@@ -61,8 +61,6 @@ def process_attack():
         if check_empty(ai_board):
             print("Game Over, player won")
             return jsonify({'hit': True, 'Player_Turn': (x, y), 'finished': 'Game Over Player wins'})
-
-
 
         ai_coordinates = generate_attack()
         attack(ai_coordinates, player_board, ships)
