@@ -1,18 +1,30 @@
 # Programming-Coursework - Battleship Game with Flask UI
 
 ## Metadata
+GitHub Repository - https://github.com/Sam-de-Ham/Programming-Coursework 
+
 Course : ECM1400 - Programming
+
 Student Name : Samuel Weisz
+
 Student Number : 730040759
+
 Date of Submission : 15/12/2023
 
 ## Features Completed
+- GitHub repository
+- Requirements.txt
+- Type hinting
+- Doc string comments
 - Config file
 - Simple game loop (one board one player)
 - CLI AI game loop
 - Flask game - player vs AI with UI
 - Flask integration
-
+- Input validation
+- Error handling
+- Logging
+- Readme
 - All required functions, plus helper functions
     - components.py
         - initialize_board()
