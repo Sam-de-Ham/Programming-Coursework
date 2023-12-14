@@ -17,6 +17,18 @@ player_board: List[List[Union[str, None]]]
 
 @app.route('/placement', methods=['GET', 'POST'])
 def placement_interface() -> Flask.Response:
+    """
+    Endpoint for the '/placement' route that handles both GET and POST requests.
+    For 'GET' requests it renders the 'placement.html' template.
+    For 'POST' requests it reads the JSON data from the response and writes it to the ships placement file.
+    
+    Parameters:
+    json data (Dict[str, Any]): The JSON data sent in the POST request
+    
+    Returns:
+    Flask.Response: 'GET' : The 'placement.html' template rendered with the correct size and ships to place.
+                    'POST' : message indicating the JSON data was received.
+    """
     global player_board, ai_board, ships, board_initialized
 
     if request.method == 'GET':
@@ -40,11 +52,21 @@ def placement_interface() -> Flask.Response:
             logging.info('Boards initialized and battleships placed')
         
         return jsonify({'message': 'Received'}), 200
-    
-
 
 @app.route('/', methods=['GET'])
 def root() -> Flask.Response:
+    """
+    A function that handles the root endpoint of the application.
+    If the board has not been created the user is redirected to /placement to do so
+    If it has, then it will render the main page. 
+
+    Parameters:
+    None
+
+    Returns:
+    Flask.Response: redirects to /placement if the board has not been created
+                    render the main page if the board has been created previously
+    """
     global board_initialized
 
     if request.method == 'GET':
@@ -59,6 +81,19 @@ def root() -> Flask.Response:
 
 @app.route('/attack', methods=['GET'])
 def process_attack() -> Any:
+    """
+    Process an attack on the game board.
+    Takes the clicked coordinates from user and attacks that place on AI board.
+    Creates an AI attack and attacks player board accordingly.
+    Returns the response in JSON format with accompanying logging. 
+
+    Parameters:
+    x (int): The x coordinate of the attack.
+    y (int): The y coordinate of the attack.
+
+    Returns:
+    JSON: information about the outcome of the attack, and the state of the game
+    """
     global player_board, ai_board
 
     if request.method == 'GET':
