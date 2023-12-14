@@ -13,8 +13,11 @@ Date of Submission : 15/12/2023
 
 ## Features Completed
 - GitHub repository
+- Readme
 - Requirements.txt
+- Expanded on unit testing
 - Type hinting
+- Object Oriented Programming for flow
 - Doc string comments
 - Config file
 - Simple game loop (one board one player)
@@ -24,7 +27,6 @@ Date of Submission : 15/12/2023
 - Input validation
 - Error handling
 - Logging
-- Readme
 - All required functions, plus helper functions
     - components.py
         - initialize_board()

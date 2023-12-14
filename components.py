@@ -37,7 +37,10 @@ def initialise_board(size: int = 10) -> List[List[Union[str, None]]]:
     Raises:
         ValueError: If the size is less than 1 or not an integer.
     """
-    if size < 1 or isinstance(size, int) is False:
+    if isinstance(size, int) is False:
+        logging.error('Size must be an integer')
+        raise ValueError('Size must be an integer')
+    if size < 1:
         logging.error('Size must be a positive integer')
         raise ValueError('Size must be a positive integer')
     board = [[None for _ in range(size)] for _ in range(size)]
