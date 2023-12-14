@@ -66,10 +66,12 @@ def create_battleships(filename: str = config.BATTLESHIPS) -> Dict[str, int]:
                 ships[line.split(":")[0]] = int(line.split(":")[1])
         logging_message = f'Battleships loaded from: {filename}'
         logging.info(logging_message)
+
     except FileNotFoundError as filenotfound:
         error_message = f'File not found: {filename}'
         logging.error(error_message)
         raise filenotfound
+
     except Exception as exception:
         error_message = f'An error occured while creating battlefships: {exception}'
         logging.error(error_message)
@@ -106,6 +108,7 @@ def place_battleships(board: List[List[Union[str, None]]], ships: Dict[str, int]
         try:
             with open(config.PLACEMENT, 'r', encoding='utf-8') as file:
                 placements = json.load(file)
+
         except FileNotFoundError as filenotfound:
             logging.error('placement.json file not found')
             error_message = f'placement.json file not found: {filenotfound}'
@@ -201,6 +204,7 @@ def place_random_single_ship(board: List[List[Union[str, None]]],
             if board[row + i][col] is not None:
                 logging.debug('Invalid placement. Retrying...')
                 return place_random_single_ship(board, boat_name, boat_size)
+
         for i in range(boat_size):
             board[row + i][col] = boat_name
     return None

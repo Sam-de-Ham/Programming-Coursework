@@ -41,6 +41,7 @@ def attack(coordinates: Tuple[int, int], board: List[List[Union[str, None]]],
     ship_name = board[y_coordinate][x_coordinate]
     battleships[ship_name] -= 1
     board[y_coordinate][x_coordinate] = None
+
     logging_message = f'Attack hit: {ship_name}'
     logging.info(logging_message)
     return True

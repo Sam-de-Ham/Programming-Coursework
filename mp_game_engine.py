@@ -12,13 +12,13 @@ Functions:
 - print_2d_array: Print a 2D array in a formatted way.
 """
 
-from components import create_battleships, initialise_board, place_battleships
-from game_engine import attack, cli_coordinates_input
-
 from typing import List, Tuple, Union
 import random
-import config
 import logging
+
+import config
+from components import create_battleships, initialise_board, place_battleships
+from game_engine import attack, cli_coordinates_input
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -32,16 +32,18 @@ def generate_attack(size: int = 10) -> Tuple[int, int]:
         size (int): The size of the grid to generate the attack position on. Defaults to 10.
 
     Returns:
-        Tuple[int, int]: A tuple representing the x and y coordinates of the generated attack position.
+        Tuple[int, int]: A tuple representing the x and y coordinates
+        of the generated attack position.
     """
-    x = random.randint(0, size - 1)
-    y = random.randint(0, size - 1)
-    return ((x, y))
+    x_coordinate = random.randint(0, size - 1)
+    y_coordinate = random.randint(0, size - 1)
+    return ((x_coordinate, y_coordinate))
 
 def ai_opponent_game_loop(size: int = 10) -> None:
     """
     Game loop for the AI opponent in the Battleships game.
-    It sets up a dictionary with both users (player and AI), each having a board and ships dictionary.
+    It sets up a dictionary with both users (player and AI),
+    each having a board and ships dictionary.
     Until one of the players runs out of ships, the game continues to get input from the player,
     and random AI attacks. When one player wins, it is logged and the game ends.
 
@@ -54,8 +56,10 @@ def ai_opponent_game_loop(size: int = 10) -> None:
     """
     logging.info('Welcome to the game Battleships!')
 
-    players['player'] = {'board' : place_battleships(initialise_board(size), create_battleships(), 'custom'), 'ships' : create_battleships()}
-    players['AI'] = {'board' : place_battleships(initialise_board(size), create_battleships(), 'random'), 'ships' : create_battleships()}
+    players['player'] = {'board' : place_battleships(initialise_board(size),
+                        create_battleships(), 'custom'), 'ships' : create_battleships()}
+    players['AI'] = {'board' : place_battleships(initialise_board(size),
+                        create_battleships(), 'random'), 'ships' : create_battleships()}
 
     while game__not_over():
         coords = cli_coordinates_input()
@@ -64,7 +68,10 @@ def ai_opponent_game_loop(size: int = 10) -> None:
 
         coords = generate_attack(size)
         outcome = attack(coords, players["player"]['board'], players["player"]['ships'])
-        logging.info(f'{"AI hit a ship!" if outcome else "AI missed!"} Coordinates: {coords}\n')
+
+        logging_message = f'{"AI hit a ship!" if outcome else "AI missed!"} Coordinates: {coords}\n'
+        logging.info(logging_message)
+
         print('Current state of your board:')
         print_2d_array(players["player"]['board'])
 
@@ -78,12 +85,11 @@ def game__not_over() -> bool:
     if all(value == 0 for value in players["player"]['ships'].values()):
         logging.info('You lost!')
         return False
-    elif all(value == 0 for value in players["AI"]['ships'].values()):
+    if all(value == 0 for value in players["AI"]['ships'].values()):
         logging.info('You won!')
         return False
-    else:
-        return True
-    
+    return True
+
 def print_2d_array(arr_2d: List[List[Union[str, None]]]) -> None:
     """
     Print a 2D array in a formatted way. This makes sure there is enough space for words.
