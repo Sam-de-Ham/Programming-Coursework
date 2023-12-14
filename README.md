@@ -57,6 +57,7 @@ Date of Submission : 15/12/2023
 
 
 ## Self-Assesment
+Looking back at the project I am extremely happy with how it came together. Through multiple iterations, I believe I have made a well-organized project, including a good README, and GitHub repository. Overall I have expanded on features in multiple ways, including adding additional pytest tests, using object oriented programming in main.py for better flow and variable scope, and adding a requirements.txt for ease of use. If I had more time, I do however think I could improve the project in some key ways, for instance making the Flask UI more pleasing to look at, and adding better AI attacking/placement algorithms. Overall however I do however that my product is high quality, and meets all requirements at a high level. 
 
 ## Overview
 The Battleship game is a multiplayer game where players take turns trying to sink each other's battleships on a tiled square game board. This project creates the logic for this game in Python, and then connects it to a UI through Flask. 
@@ -90,8 +91,20 @@ To run the prject, follow these steps:
 1. Make sure you have Python 3 installed
 2. Clone/unzip this repository to your local machine
 3. Install the required dependencies by running 'pip install -r requirements.txt' (Flask==2.2.2, pytest==7.4.0)
-4. Run the game by executing 'python main.py' in the main project directory
-5. Access the game through a web browser at http://127.0.0.1:5000/
+4. Follow either 'How to use Flask version' or 'How to use CMD version (ai_opponent_game_loop)' for either version of the game. 
+
+## How to use Flask version
+1. Run the game by executing 'python main.py' in the main project directory
+2. Access the game through a web browser at http://127.0.0.1:5000/
+3. Place all ships by left clicking fields and pressing r to rotate
+4. Click 'send game' to confirm placement
+5. Attack the AI on the left field until either the player or AI wins (error message will be displayed)
+
+## How to use CMD version (ai_opponent_game_loop)
+1. Run mp_game_engine.py
+2. Enter guess for x, then y coordinates to attack in CMD
+3. Look at enemie's attack and the status of your board
+4. Continue until win message for either player is displayed.
 
 ## License
 All rights reserved. 
