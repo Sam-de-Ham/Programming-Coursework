@@ -11,12 +11,12 @@ Functions:
 - process_attack: Function that processes an attack '/attack' on the game board.
 """
 
+import json
+import logging
 from typing import List, Dict, Union, Any
 from flask import Flask, render_template, request, jsonify, redirect
-import json
-import config
-import logging
 
+import config
 from components import initialise_board, create_battleships, place_battleships, check_empty
 from game_engine import attack
 from mp_game_engine import generate_attack
@@ -35,20 +35,23 @@ def placement_interface() -> Any:
     """
     Endpoint for the '/placement' route that handles both GET and POST requests.
     For 'GET' requests it renders the 'placement.html' template.
-    For 'POST' requests it reads the JSON data from the response and writes it to the ships placement file.
+    For 'POST' requests it reads the JSON data from the response
+    and writes it to the ships placement file.
     
     Parameters:
     json data (Dict[str, Any]): The JSON data sent in the POST request
     
     Returns:
-    Flask.Response: 'GET' : The 'placement.html' template rendered with the correct size and ships to place.
+    Flask.Response: 'GET' : The 'placement.html' template rendered
+                            with the correct size and ships to place.
                     'POST' : message indicating the JSON data was received.
     """
     # global player_board, ai_board, ships, board_initialized
 
     if request.method == 'GET':
         ships = create_battleships()
-        logging.info(f'Rendering {config.PLACEMENT_HTML} for ship placement')
+        logging_message = f'Rendering {config.PLACEMENT_HTML} for ship placement'
+        logging.info(logging_message)
         return render_template(config.PLACEMENT_HTML, ships=ships, board_size=10)
 
     if request.method == 'POST':
@@ -65,8 +68,9 @@ def placement_interface() -> Any:
             ai_board = place_battleships(ai_board, ships, "random")
             board_initialized = True
             logging.info('Boards initialized and battleships placed')
-        
+
         return jsonify({'message': 'Received'}), 200
+    return None
 
 @app.route('/', methods=['GET'])
 def root() -> Any:
@@ -86,11 +90,14 @@ def root() -> Any:
 
     if request.method == 'GET':
         if board_initialized:
-            logging.info(f'Rendering {config.MAIN_HTML} for gameplay')
+            logging_message = f'Rendering {config.MAIN_HTML} for gameplay'
+            logging.info(logging_message)
             return render_template(config.MAIN_HTML, player_board=player_board)
         else:
-            logging.info(f'Redirecting to {config.PLACEMENT_HTML} for ship placement')
+            logging_message = f'Redirecting to {config.PLACEMENT_HTML} for ship placement'
+            logging.info(logging_message)
             return redirect('/placement')
+    return None
 
 @app.route('/attack', methods=['GET'])
 def process_attack() -> Any:
@@ -110,25 +117,31 @@ def process_attack() -> Any:
     global player_board, ai_board
 
     if request.method == 'GET':
-        x = int(request.args.get('x'))
-        y = int(request.args.get('y'))
+        x_coordinate = int(request.args.get('x'))
+        y_coordinate = int(request.args.get('y'))
 
-        outcome = attack((x, y), ai_board, ships)
-        logging.info(f'Player attacked AI at coordinates: {x}, {y}. Outcome: {"Hit" if outcome else "Miss"}')
+        outcome = attack((x_coordinate, y_coordinate), ai_board, ships)
+        logging_message = (f'Player attacked AI at coordinates: {x_coordinate}, {y_coordinate}. '
+                            f'Outcome: {"Hit" if outcome else "Miss"}')
+        logging.info(logging_message)
 
         if check_empty(ai_board):
             logging.info('Game Over, player won')
-            return jsonify({'hit': True, 'Player_Turn': (x, y), 'finished': 'Game Over Player wins'})
+            return jsonify({'hit': True, 'Player_Turn': (x_coordinate, y_coordinate),
+                            'finished': 'Game Over Player wins'})
 
         ai_coordinates = generate_attack(config.SIZE)
         attack(ai_coordinates, player_board, ships)
-        logging.info(f'AI attacked player at coordinates: {ai_coordinates}')
+        logging_message = f'AI attacked player at coordinates: {ai_coordinates}'
+        logging.info(logging_message)
 
         if check_empty(player_board):
             logging.info('Game Over, AI won')
-            return jsonify({'hit': outcome, 'AI_Turn': ai_coordinates, 'finished': 'Game Over AI wins'})
-        
+            return jsonify({'hit': outcome, 'AI_Turn': ai_coordinates,
+                            'finished': 'Game Over AI wins'})
+
         return jsonify({'hit': outcome, 'AI_Turn': ai_coordinates})
+    return None
 
 if __name__ == '__main__':
     app.run(debug=True)
