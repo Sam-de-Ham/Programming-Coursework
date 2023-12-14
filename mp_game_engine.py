@@ -61,7 +61,7 @@ def ai_opponent_game_loop(size: int = 10) -> None:
     players['AI'] = {'board' : place_battleships(initialise_board(size),
                     create_battleships(), config.ALGORITHM_RANDOM), 'ships' : create_battleships()}
 
-    while game__not_over():
+    while game_not_over():
         coords = cli_coordinates_input()
         outcome = attack(coords, players['AI']['board'], players['AI']['ships'])
         logging.info("You hit a ship!\n\n" if outcome else "You missed!\n")
@@ -75,7 +75,7 @@ def ai_opponent_game_loop(size: int = 10) -> None:
         print('Current state of your board:')
         print_2d_array(players["player"]['board'])
 
-def game__not_over() -> bool:
+def game_not_over() -> bool:
     """
     Check that the game is not over. Used to loop the ai_opponent_game_loop.
 

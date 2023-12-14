@@ -83,8 +83,6 @@ class BattleshipsGame:
                 self.player_board = initialise_board(config.SIZE)
                 self.ai_board = initialise_board(config.SIZE)
 
-                print("FEEDING SHIPSSHIPSSHIPSSHIPS", self.ships)
-
                 self.player_board = place_battleships(self.player_board,
                                                     self.ships, config.ALGORITHM_CUSTOM)
                 self.ai_board = place_battleships(self.ai_board,

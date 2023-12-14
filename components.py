@@ -114,8 +114,6 @@ def place_battleships(board: List[List[Union[str, None]]], ships: Dict[str, int]
             error_message = f'placement.json file not found: {filenotfound}'
             raise FileNotFoundError(error_message) from filenotfound
 
-        print("SHIPSSHIPSSHIPSSHIPSSHIPSSHIPSSHIPS", ships.items())
-
         for boat_name, boat_size in ships.items():
             place_custom_single_ship(board, boat_name, boat_size, placements[boat_name])
         return board
