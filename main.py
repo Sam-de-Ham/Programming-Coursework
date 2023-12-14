@@ -1,6 +1,15 @@
-from components import initialise_board, create_battleships, place_battleships, check_empty
-from game_engine import attack
-from mp_game_engine import generate_attack
+"""
+main.py - Module for the main application logic of the Battleships game
+
+This module defines the Flask application and handles the routes
+and endpoints for the Battleships game.
+It includes functions for handling ship placement, attacking, and rendering the game interface.
+
+Functions:
+- placement_interface: Endpoint for the '/placement' route that handles ship placement.
+- root: Function that handles the root '/' endpoint of the application.
+- process_attack: Function that processes an attack '/attack' on the game board.
+"""
 
 from typing import List, Dict, Union, Any
 from flask import Flask, render_template, request, jsonify, redirect
@@ -8,15 +17,21 @@ import json
 import config
 import logging
 
+from components import initialise_board, create_battleships, place_battleships, check_empty
+from game_engine import attack
+from mp_game_engine import generate_attack
+
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 app = Flask(__name__)
 
 board_initialized: bool = False
-player_board: List[List[Union[str, None]]]
+player_board: List[List[Union[str, None]]] = []
+ai_board: List[List[Union[str, None]]] = []
+ships: Dict[str, int] = {}
 
 @app.route('/placement', methods=['GET', 'POST'])
-def placement_interface() -> Flask.Response:
+def placement_interface() -> Any:
     """
     Endpoint for the '/placement' route that handles both GET and POST requests.
     For 'GET' requests it renders the 'placement.html' template.
@@ -29,17 +44,17 @@ def placement_interface() -> Flask.Response:
     Flask.Response: 'GET' : The 'placement.html' template rendered with the correct size and ships to place.
                     'POST' : message indicating the JSON data was received.
     """
-    global player_board, ai_board, ships, board_initialized
+    # global player_board, ai_board, ships, board_initialized
 
     if request.method == 'GET':
         ships = create_battleships()
         logging.info(f'Rendering {config.PLACEMENT_HTML} for ship placement')
         return render_template(config.PLACEMENT_HTML, ships=ships, board_size=10)
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         data: Dict[str, Any] = request.get_json()
 
-        with open(config.PLACEMENT, 'w') as json_file:
+        with open(config.PLACEMENT, 'w', encoding="utf-8") as json_file:
             json.dump(data, json_file)
 
         if not board_initialized:
@@ -54,7 +69,7 @@ def placement_interface() -> Flask.Response:
         return jsonify({'message': 'Received'}), 200
 
 @app.route('/', methods=['GET'])
-def root() -> Flask.Response:
+def root() -> Any:
     """
     A function that handles the root endpoint of the application.
     If the board has not been created the user is redirected to /placement to do so
@@ -70,8 +85,6 @@ def root() -> Flask.Response:
     global board_initialized
 
     if request.method == 'GET':
-        global board_initialized
-
         if board_initialized:
             logging.info(f'Rendering {config.MAIN_HTML} for gameplay')
             return render_template(config.MAIN_HTML, player_board=player_board)

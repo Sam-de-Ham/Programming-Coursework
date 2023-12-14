@@ -1,3 +1,17 @@
+"""
+mp_game_engine.py - Module for managing the multiplayer game logic of Battleships
+
+This module provides functions for managing the multiplayer game logic of Battleships,
+including generating attack positions, running a game loop for an AI opponent, checking
+if the game is over, and printing a 2D array.
+
+Functions:
+- generate_attack: Generate a random attack position within a given size.
+- ai_opponent_game_loop: Game loop for the AI opponent in the Battleships game.
+- game_not_over: Check that the game is not over.
+- print_2d_array: Print a 2D array in a formatted way.
+"""
+
 from components import create_battleships, initialise_board, place_battleships
 from game_engine import attack, cli_coordinates_input
 

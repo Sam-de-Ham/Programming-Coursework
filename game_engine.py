@@ -1,37 +1,54 @@
-from components import initialise_board, create_battleships, place_battleships
+"""
+game_engine.py - Module for managing the game logic of Battleships
+
+This module provides functions for managing the game logic of Battleships,
+including performing attacks, getting user input, and running a simple game loop.
+
+Functions:
+- attack: Performs a single attack on given the coordinates, board, and battleships.
+- get_input: Function to get an integer input from the user within a specified range.
+- cli_coordinates_input: A function that prompts the user to enter x and y coordinates.
+- simple_game_loop: Represents a simple game loop for the game Battleships.
+"""
 
 from typing import List, Dict, Tuple, Union
-import config
 import logging
+
+import config
+from components import initialise_board, create_battleships, place_battleships
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def attack(coordinates: Tuple[int, int], board: List[List[Union[str, None]]], battleships: Dict[str, int]) -> bool:
+def attack(coordinates: Tuple[int, int], board: List[List[Union[str, None]]],
+            battleships: Dict[str, int]) -> bool:
     """
     Performs a single attack on given the coordinates, board, and battleships.
 
     Parameters:
         coordinates (Tuple[int, int]): The x and y coordinates of the attack.
         board (List[List[Union[str, None]]]): The game board represented as a 2-d list.
-        battleships (Dict[str, int]): A dictionary mapping the name of each battleship to its remaining health.
+        battleships (Dict[str, int]): A dictionary mapping the name of each battleship
+                                        to its current length.
 
     Returns:
         bool: True if the attack hits a battleship, False otherwise.
     """
-    x, y = coordinates
-    if board[y][x] == None:
+    x_coordinate, y_coordinate = coordinates
+    if board[y_coordinate][x_coordinate] is None:
         logging.info('Attack missed')
         return False
-    else:
-        ship_name = board[y][x]
-        battleships[ship_name] -= 1
-        board[y][x] = None
-        logging.info(f'Attack hit: {ship_name}')
-        return True
-    
+
+    ship_name = board[y_coordinate][x_coordinate]
+    battleships[ship_name] -= 1
+    board[y_coordinate][x_coordinate] = None
+    logging_message = f'Attack hit: {ship_name}'
+    logging.info(logging_message)
+    return True
+
 def get_input(prompt: str, size: int = 10) -> int:
     """
-    Function to get an integer input from the user within a specified range. Runs until valid input is provided.
+    Function to get an integer input from the user within a specified range.
+    Runs until valid input is provided.
     
     Args:
         prompt (str): The prompt to display to the user.
@@ -55,14 +72,14 @@ def cli_coordinates_input() -> Tuple[int, int]:
     Returns:
         A tuple containing the x and y coordinates entered by the user.
     """
-    x = get_input("Enter x coordinate: ")
-    y = get_input("Enter y coordinate: ")
-    return x, y
+    x_input = get_input("Enter x coordinate: ")
+    y_input = get_input("Enter y coordinate: ")
+    return x_input, y_input
 
 def simple_game_loop(size: int = 10) -> None:
     """
     This function represents a simple game loop for the game Battleships.
-    It takes an optional parameter `size` which specifies the size of the game board (default is 10).
+    It takes an optional parameter `size` that specifies the size of the game board (default is 10).
 
     The main loop of the game continues until all the ships have been sunk. Inside the loop,
     the function prompts the player for coordinates using the `cli_coordinates_input` function,
@@ -84,7 +101,7 @@ def simple_game_loop(size: int = 10) -> None:
 
     while not all(value == 0 for value in ships.values()):
         coords = cli_coordinates_input()
-        outcome = attack(coords, board, ships)
+        attack(coords, board, ships)
     logging.info('Game over, you sunk all ships!')
 
 
