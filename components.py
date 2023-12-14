@@ -97,7 +97,7 @@ def place_custom_single_ship(board: List[List[Union[str, None]]], boat_name: str
     Place a single custom ship on the board. Used by place_battleships() when using the 'custom' algorithm.
 
     Args:
-        board (List[List[Union[str, None]]]): The game board represented as a 2D list.
+        board (List[List[Union[str, None]]]): The game board represented as a 2-d list.
         boat_name (str): The name of the ship to be placed.
         boat_size (int): The size of the ship to be placed.
         placement (Tuple[str, str, str]): A tuple representing the placement of the ship. 
@@ -138,7 +138,7 @@ def place_random_single_ship(board: List[List[Union[str, None]]], boat_name: str
     Randomly places a single ship on the board. Used by place_battleships() when using the 'random' algorithm.
     
     Args:
-        board (List[List[Union[str, None]]]): The game board represented as a 2D list.
+        board (List[List[Union[str, None]]]): The game board represented as a 2-d list.
         boat_name (str): The name of the ship to be placed.
         boat_size (int): The size of the ship to be placed.
     
@@ -181,7 +181,7 @@ def check_empty(board: List[List[Union[str, None]]]) -> bool:
     Check if the given board is empty.
 
     Args:
-        board (List[List[Union[str, None]]]): The board to be checked.
+        board (List[List[Union[str, None]]]): The game board represented as a 2-d list which is to be checked.
 
     Returns:
         bool: True if the board is empty, False otherwise.
