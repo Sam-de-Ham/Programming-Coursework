@@ -98,7 +98,7 @@ def simple_game_loop(size: int = 10) -> None:
 
     board = initialise_board(size)
     ships = create_battleships()
-    place_battleships(board, ships)
+    place_battleships(board, ships, config.ALGORITHM_SIMPLE)
 
     while not all(value == 0 for value in ships.values()):
         coords = cli_coordinates_input()

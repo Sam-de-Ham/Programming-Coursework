@@ -57,9 +57,9 @@ def ai_opponent_game_loop(size: int = 10) -> None:
     logging.info('Welcome to the game Battleships!')
 
     players['player'] = {'board' : place_battleships(initialise_board(size),
-                        create_battleships(), 'custom'), 'ships' : create_battleships()}
+                    create_battleships(), config.ALGORITHM_CUSTOM), 'ships' : create_battleships()}
     players['AI'] = {'board' : place_battleships(initialise_board(size),
-                        create_battleships(), 'random'), 'ships' : create_battleships()}
+                    create_battleships(), config.ALGORITHM_RANDOM), 'ships' : create_battleships()}
 
     while game__not_over():
         coords = cli_coordinates_input()
@@ -104,7 +104,7 @@ def print_2d_array(arr_2d: List[List[Union[str, None]]]) -> None:
 
     for row in arr_2d:
         print(" ".join(str(row[i]).ljust(col_widths[i]) for i in range(len(row))))
-    print()
+    print('\n')
 
 if __name__ == "__main__":
     ai_opponent_game_loop(config.SIZE)

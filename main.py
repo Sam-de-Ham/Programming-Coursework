@@ -68,10 +68,10 @@ class BattleshipsGame:
         """
 
         if request.method == 'GET':
-            ships = create_battleships()
+            self.ships = create_battleships()
             logging_message = f'Rendering {config.PLACEMENT_HTML} for ship placement'
             logging.info(logging_message)
-            return render_template(config.PLACEMENT_HTML, ships=ships, board_size=10)
+            return render_template(config.PLACEMENT_HTML, ships=self.ships, board_size=10)
 
         if request.method == 'POST':
             data: Dict[str, Any] = request.get_json()
@@ -79,13 +79,17 @@ class BattleshipsGame:
             with open(config.PLACEMENT, 'w', encoding="utf-8") as json_file:
                 json.dump(data, json_file)
 
-            if not board_initialized:
-                player_board = initialise_board(size = 10)
-                ai_board = initialise_board(size = 10)
+            if not self.board_initialized:
+                self.player_board = initialise_board(config.SIZE)
+                self.ai_board = initialise_board(config.SIZE)
 
-                player_board = place_battleships(player_board, ships, "custom")
-                ai_board = place_battleships(ai_board, ships, "random")
-                board_initialized = True
+                print("FEEDING SHIPSSHIPSSHIPSSHIPS", self.ships)
+
+                self.player_board = place_battleships(self.player_board,
+                                                    self.ships, config.ALGORITHM_CUSTOM)
+                self.ai_board = place_battleships(self.ai_board,
+                                                    self.ships, config.ALGORITHM_RANDOM)
+                self.board_initialized = True
                 logging.info('Boards initialized and battleships placed')
 
             return jsonify({'message': 'Received'}), 200
